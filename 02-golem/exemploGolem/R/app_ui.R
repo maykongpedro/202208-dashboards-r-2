@@ -17,10 +17,15 @@ app_ui <- function(request) {
                   inputId = "estacao",
                   label = "Selecione uma estação:",
                   choices = sort(unique(cetesb$estacao_cetesb))
+              ),
+              selectInput(
+                inputId = "poluente",
+                label = "Selecine um poluente:",
+                choices = c("Carregando..." = "")
               )
           ),
           mainPanel(
-              
+              echarts4r::echarts4rOutput(outputId = "grafico")
           )
       )
     )
