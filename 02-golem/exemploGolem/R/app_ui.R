@@ -10,7 +10,19 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic 
     fluidPage(
-      h1("exemploGolem")
+      h1("Poluição do ar"),
+      sidebarLayout(
+          sidebarPanel(
+              selectInput(
+                  inputId = "estacao",
+                  label = "Selecione uma estação:",
+                  choices = sort(unique(cetesb$estacao_cetesb))
+              )
+          ),
+          mainPanel(
+              
+          )
+      )
     )
   )
 }
