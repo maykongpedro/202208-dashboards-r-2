@@ -11,30 +11,10 @@ mod_reactable_ui <- function(id) {
   ns <- NS(id)
   tagList(
     h1("Reactable"),
-    fluidRow(
-      bs4Dash::bs4Card(
-        title = "Filtros",
-        width = 12,
-        fluidRow(
-          column(
-            width = 4,
-            selectInput(
-              inputId = ns("ano"),
-              label = "Selecione o ano",
-              choices = unique(sort(pnud$ano))
-            )
-          ),
-          column(
-            width = 4,
-            selectInput(
-              inputId = ns("metrica"),
-              label = "Selecione a métrica",
-              choices = c("idhm", "espvida", "rdpc", "gini")
-            )
-          )
-        )
-      )
-    ),
+
+    # add módulo de filtro - ou seja, módulo dentro de módulo
+    mod_filtro_ui(ns("filtro_1")),
+
     fluidRow(
       column(
         width = 12,
@@ -52,11 +32,12 @@ mod_reactable_server <- function(id) {
     ns <- session$ns
 
     # reactable ---------------------------------------------------------------
+    valores_do_filtro <- mod_filtro_server("filtro_1")
 
     output$tabela_rt <- reactable::renderReactable({
       pnud |>
-        dplyr::filter(ano == input$ano) |>
-        dplyr::arrange(dplyr::across(input$metrica, dplyr::desc)) |>
+        dplyr::filter(ano == valores_do_filtro()$ano) |>
+        dplyr::arrange(dplyr::across(valores_do_filtro()$metrica, dplyr::desc)) |>
         dplyr::slice(1:10) |>
         dplyr::select(
           muni_nm,
