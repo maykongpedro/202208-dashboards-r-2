@@ -7,33 +7,37 @@
 app_server <- function( input, output, session ) {
   # Your application server logic 
   
-    output$plot <- echarts4r::renderEcharts4r({
-        
-        dados |> 
-            dplyr::filter(num_temporada == input$temporada) |>
-            dplyr::mutate(
-                titulo = stringr::str_glue(
-                    "{num_dentro_temporada} - {titulo}"
-                )
-            ) |> 
-            dplyr::arrange(dplyr::desc(num_dentro_temporada)) |> 
-            echarts4r::e_chart(
-                x = qtd_espectadores_EUA,
-                reorder = FALSE
-            ) |> 
-            echarts4r::e_bar(serie = titulo) |> 
-            echarts4r::e_y_axis(type = "category") |> 
-            echarts4r::e_x_axis(
-                name = "Número de espectadores nos EUA (em milhões)",
-                # fonte: https://echarts.apache.org/en/option.html#xAxis.nameLocation
-                nameLocation = "center",
-                # fonte: https://echarts.apache.org/en/option.html#xAxis.nameGap
-                nameGap = 30
-            ) |> 
-            echarts4r::e_legend(show = FALSE) |> 
-            # fazer com que o eixo y mostre todas o nome completo
-            echarts4r::e_grid(containLabel = TRUE)
-            
-    })
-    
+  output$plot <- echarts4r::renderEcharts4r({
+    dados |>
+      dplyr::filter(num_temporada == input$temporada) |>
+      dplyr::mutate(titulo = stringr::str_glue("{num_dentro_temporada} - {titulo}")) |>
+      dplyr::arrange(dplyr::desc(num_dentro_temporada)) |>
+      echarts4r::e_chart(x = qtd_espectadores_EUA,
+                         reorder = FALSE) |>
+      echarts4r::e_bar(serie = titulo) |>
+      echarts4r::e_y_axis(type = "category",
+                          axisLabel = list(color = "white")) |>
+      echarts4r::e_x_axis(
+        name = "Número de espectadores nos EUA (em milhões)",
+        # fonte: https://echarts.apache.org/en/option.html#xAxis.nameLocation
+        nameLocation = "center",
+        # fonte: https://echarts.apache.org/en/option.html#xAxis.nameGap
+        nameGap = 30,
+        # fonte: https://echarts.apache.org/en/option.html#xAxis.nameTextStyle
+        nameTextStyle = list(
+          color = "white",
+          fontSize = 16
+        ),
+        # fonte: https://echarts.apache.org/en/option.html#xAxis.axisLabel
+        axisLabel = list(color = "white")
+      ) |>
+      echarts4r::e_legend(show = FALSE) |>
+      # fazer com que o eixo y mostre todas o nome completo
+      echarts4r::e_grid(containLabel = TRUE) |>
+      # trocar a cor das barras para ser a mesma do título
+      echarts4r::e_color(color = "#08acc6")
+      
+      
+  })
+  
 }
