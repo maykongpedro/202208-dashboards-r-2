@@ -41,6 +41,7 @@ app_ui <- function(request) {
         column(
           width = 10,
           # offset = 2, não é mais necessário pois a imagem já vai ocupar o espaço
+          class = "areaGrafico", # adicionar uma cass para poder alterar o bg no css
           echarts4r::echarts4rOutput(outputId = "plot")
         )
       )
