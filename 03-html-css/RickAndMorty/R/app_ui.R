@@ -14,13 +14,24 @@ app_ui <- function(request) {
       h1("Rick and Morty"),
       # linha em branco
       hr(),
-      # linha com conteúdo
+      # linha 1 com conteúdo
       fluidRow(
-        width = 3,
-        selectInput(
-          inputId = "temporada",
-          label = "Selecione a temporada:",
-          choices = unique(dados$num_temporada) |> sort()
+        column(
+          width = 3,
+          selectInput(
+            inputId = "temporada",
+            label = "Selecione a temporada:",
+            choices = unique(dados$num_temporada) |> sort()
+          )
+        )
+      ),
+      
+      # linha 2 - gráfico
+      fluidRow(
+        column(
+          width = 10,
+          offset = 2,
+          echarts4r::echarts4rOutput(outputId = "plot")
         )
       )
     )
