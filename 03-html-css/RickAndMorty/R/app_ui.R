@@ -11,7 +11,7 @@ app_ui <- function(request) {
     # Your application UI logic 
     fluidPage(
       # título
-      h1("Rick and Morty"),
+      h1("Rick and Morty", align = "center"),
       # linha em branco
       hr(),
       # linha 1 com conteúdo

@@ -1,0 +1,38 @@
+
+/* importando uma fonte alterantiva */
+@font-face {
+    font-family: "get_schwifty";
+    src: url("get_schwifty.ttf") format("truetype");
+}
+
+/* para mudar a imagem de fundo do app */
+body {
+    background-image: url("universo.jpg");
+}
+
+
+/* para controlar a margem do app*/
+.container-fluid {
+    margin-top: 2.5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+/* para alterar a cor do selectInput "temporada" */
+#temporada-label {
+    color: white;
+}
+
+
+/* usando a fonte alternativa no título 1 */
+h1 {
+    font-family: "get_schwifty";
+    font-size: 55pt;
+    color: #08acc6;
+    /* iniciar o text-shador com 1px 1px 1px, depois no app da para inspecionar
+    e ir mudando pra melhor alternativa */
+    text-shadow: 3px 2px 0px #79b35a;
+}
