@@ -36,3 +36,11 @@ h1 {
     e ir mudando pra melhor alternativa */
     text-shadow: 3px 2px 0px #79b35a;
 }
+
+
+/* travar a imagem do rick and morty para ficar sempre na parte baixa da tela */
+.img_rick_and_morty {
+    position: fixed;
+    bottom: 0;
+    width: 25%;
+}

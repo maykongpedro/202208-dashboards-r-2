@@ -29,8 +29,18 @@ app_ui <- function(request) {
       # linha 2 - gráfico
       fluidRow(
         column(
+          width = 2,
+          # imagem
+          img(
+            src = "www/rick.png",
+            # esse width deixa de ser necessário após o uso do css
+            # width = "100%", # a imagem tem que ser 100% do tamanho disponível na coluna
+            class = "img_rick_and_morty" # adicionar uma class para poder alterar no css
+          )
+        ),
+        column(
           width = 10,
-          offset = 2,
+          # offset = 2, não é mais necessário pois a imagem já vai ocupar o espaço
           echarts4r::echarts4rOutput(outputId = "plot")
         )
       )
