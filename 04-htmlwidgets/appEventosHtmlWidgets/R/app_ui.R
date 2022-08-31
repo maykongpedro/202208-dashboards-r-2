@@ -25,6 +25,7 @@ app_ui <- function(request) {
           bs4Dash::bs4TabItem(
             tabName = "reactable",
             # adicionar módulo reactable_ui
+            mod_reactable_ui("reactable_1")
           )
         )
       )
