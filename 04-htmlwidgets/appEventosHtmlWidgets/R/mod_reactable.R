@@ -72,6 +72,31 @@ mod_reactable_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # criar base com o top 10
+    data_top_10 <- reactive({
+      pnud |>
+        dplyr::filter(ano == input$ano) |>
+        dplyr::arrange(dplyr::desc(.data[[input$metrica]])) |>
+        dplyr::slice(1:10) |>
+        dplyr::select(
+          muni_nm,
+          one_of(input$metrica),
+          espvida,
+          idhm,
+          rdpc,
+          gini
+        )
+    })
+
+    # output tabela
+    output$tabela <- reactable::renderReactable({
+      data_top_10() |> reactable::reactable(
+        # para selecionar várias linhas na tabela
+        selection = "multiple"
+        )
+    })
+
+
   })
 }
 
