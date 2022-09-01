@@ -106,9 +106,12 @@ mod_reactable_server <- function(id){
     # dentro desse output temos um problema de reatividade, pois ela é acionada
     # nas linhas selecionadas e no "data_top_10", o que força o mapa a rodar 2x,
     # caso esse processo de construção do mapa demorasse, seria necessário realizar
-    # um ajuste de reatividade mais complexo
+    # um ajuste de reatividade mais complexo. Uma ideia do professor seria criar
+    # um botão que fizesse o filtro, assim tudo seria ativado somente quando o
+    # botão fosse acionado.
+    # Para esse caso um 'isolate' não funcionaria pois impede a reatividade de um
+    # dos itens funcionar, e precisamos que os dois itens reativos funcionem...
     output$mapa <- leaflet::renderLeaflet({
-
       # obter linhas selecionadas da tabela, o retorno é um vetor com o índice
       # de cada linha selecionada
       linhas_selecionadas <- reactable::getReactableState(
