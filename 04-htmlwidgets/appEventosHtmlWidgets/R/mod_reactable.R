@@ -12,7 +12,8 @@ mod_reactable_ui <- function(id){
   tagList(
     h1("Reactable"),
     hr(),
-    # linha 1
+
+    # linha 1 -----------------------------------------------------------------
     fluidRow(
       bs4Dash::bs4Card(
         title = "Filtros",
@@ -49,7 +50,8 @@ mod_reactable_ui <- function(id){
     ),
     # espaço
     br(),
-    # linha 2
+
+    # linha 2 -----------------------------------------------------------------
     fluidRow(
       # coluna 1
       column(
@@ -72,12 +74,18 @@ mod_reactable_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    # criar base com o top 10
+    # criar base com o top 10 ------------------------------------
     data_top_10 <- reactive({
       pnud |>
         dplyr::filter(ano == input$ano) |>
         dplyr::arrange(dplyr::desc(.data[[input$metrica]])) |>
-        dplyr::slice(1:10) |>
+        dplyr::slice(1:10)
+
+    })
+
+    # output tabela ----------------------------------------------
+    output$tabela <- reactable::renderReactable({
+      data_top_10() |>
         dplyr::select(
           muni_nm,
           one_of(input$metrica),
@@ -85,17 +93,46 @@ mod_reactable_server <- function(id){
           idhm,
           rdpc,
           gini
+        ) |>
+        reactable::reactable(
+          # para selecionar várias linhas na tabela
+          selection = "multiple",
+          defaultSelected = 1 # para sempre começar com a linha 1 selecionada
         )
     })
 
-    # output tabela
-    output$tabela <- reactable::renderReactable({
-      data_top_10() |> reactable::reactable(
-        # para selecionar várias linhas na tabela
-        selection = "multiple"
-        )
-    })
 
+    # output mapa -------------------------------------------------
+    # dentro desse output temos um problema de reatividade, pois ela é acionada
+    # nas linhas selecionadas e no "data_top_10", o que força o mapa a rodar 2x,
+    # caso esse processo de construção do mapa demorasse, seria necessário realizar
+    # um ajuste de reatividade mais complexo
+    output$mapa <- leaflet::renderLeaflet({
+
+      # obter linhas selecionadas da tabela, o retorno é um vetor com o índice
+      # de cada linha selecionada
+      linhas_selecionadas <- reactable::getReactableState(
+        outputId = "tabela",
+        name = "selected"
+      )
+
+      # para a primeira rodada onde nada é selecionado ele não faz nada
+      if (is.null(linhas_selecionadas)) {
+        NULL
+      } else {
+        # plotar o mapa
+        data_top_10() |>
+          dplyr::slice(linhas_selecionadas) |>
+          leaflet::leaflet() |>
+          leaflet::addTiles() |>
+          leaflet::addAwesomeMarkers(
+            lng = ~ lon,
+            lat = ~ lat,
+            label = ~ muni_nm
+          )
+      }
+
+    })
 
   })
 }
