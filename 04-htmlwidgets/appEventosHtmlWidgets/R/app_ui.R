@@ -17,6 +17,11 @@ app_ui <- function(request) {
             text = "Reactable",
             tabName = "reactable",
             icon = icon("table")
+          ),
+          bs4Dash::bs4SidebarMenuItem(
+            text = "Leaflet",
+            tabName = "leaflet",
+            icon = icon("map")
           )
         )
       ),
@@ -26,6 +31,11 @@ app_ui <- function(request) {
             tabName = "reactable",
             # adicionar módulo reactable_ui
             mod_reactable_ui("reactable_1")
+          ),
+          bs4Dash::bs4TabItem(
+            # adicionar módulo leaflet__ui
+            tabName = "leaflet",
+            mod_leaflet_ui("leaflet_1")
           )
         )
       )
