@@ -14,40 +14,10 @@ mod_reactable_ui <- function(id){
     hr(),
 
     # linha 1 -----------------------------------------------------------------
-    fluidRow(
-      bs4Dash::bs4Card(
-        title = "Filtros",
-        width = 12,
-        # linha
-        fluidRow(
-          # coluna 1
-          column(
-            width = 4,
-            selectInput(
-              inputId = ns("ano"),
-              label = "Selecione um ano",
-              choices = unique(pnud$ano),
-              width = "90%"
-            )
-          ),
-          # coluna 2
-          column(
-            width = 4,
-            selectInput(
-              inputId = ns("metrica"),
-              label = "Selecione uma métrica",
-              choices = c(
-                "IDHM" = "idhm",
-                "Expectativa de vida" = "espvida",
-                "Renda per capita" = "rdpc",
-                "Índice de GINI" = "gini"
-              ),
-              width = "90%"
-            )
-          )
-        )
-      )
-    ),
+    # como estou chamando um módulo dentro de outro módulo, o input precisa
+    # conter o 'ns'
+    mod_filtro_ui(ns("filtro_1")),
+
     # espaço
     br(),
 
@@ -74,11 +44,14 @@ mod_reactable_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # obter filtros -----------------------------------------------------------
+    filter_values <- mod_filtro_server("filtro_1")
+
     # criar base com o top 10 ------------------------------------
     data_top_10 <- reactive({
       pnud |>
-        dplyr::filter(ano == input$ano) |>
-        dplyr::arrange(dplyr::desc(.data[[input$metrica]])) |>
+        dplyr::filter(ano == filter_values()$ano) |>
+        dplyr::arrange(dplyr::desc(.data[[filter_values()$metrica]])) |>
         dplyr::slice(1:10)
 
     })
@@ -88,7 +61,7 @@ mod_reactable_server <- function(id){
       data_top_10() |>
         dplyr::select(
           muni_nm,
-          one_of(input$metrica),
+          one_of(filter_values()$metrica),
           espvida,
           idhm,
           rdpc,
