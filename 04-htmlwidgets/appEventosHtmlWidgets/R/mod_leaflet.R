@@ -81,6 +81,7 @@ mod_leaflet_server <- function(id){
         leaflet::leaflet() |>
         leaflet::addTiles() |>
         leaflet::addPolygons(
+          layerId = ~uf_sigla, # necessário para ser utilizado no "click"
           fillColor = ~cores(media),
           color = "black",
           fillOpacity = 0.8,
@@ -100,8 +101,18 @@ mod_leaflet_server <- function(id){
     # output tabela -----------------------------------------------------------
     output$tabela <- reactable::renderReactable({
 
-      # seleção de estado
-      estado <- "RJ"
+      # usar o browser para descobrir quais as possibilidades ao clicar dentro
+      # dos shapes, e ir exploarando os inputs ativos na sessão
+      # browser()
+
+
+      # seleção de estado, começa com a seleção de um estado para poder filtrar
+      # a tabela, conforme a seleção vai sendo feita o estado vai mudando
+      estado <- input$mapa_shape_click$id # retorna o layerID do shape clicado
+
+      if (is.null(estado)) {
+        estado <- "RJ"
+      }
 
       # filtrar base e organizar dados
       pnud |>
