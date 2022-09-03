@@ -49,6 +49,54 @@ mod_leaflet_server <- function(id){
     filter_values <- mod_filtro_server("filtro_1")
 
 
+    # output mapa -------------------------------------------------------------
+    output$mapa <- leaflet::renderLeaflet({
+
+      # criar tabela para o mapa
+      tab_mapa <- pnud |>
+        dplyr::filter(ano == filter_values()$ano) |>
+        dplyr::group_by(uf_sigla) |>
+        dplyr::summarise(
+          media = mean(
+            x = .data[[filter_values()$metrica]],
+            na.rm = TRUE
+          )
+        ) |>
+        # join com os dados geo -> essa etapa transoforma os dados em tibble
+        dplyr::left_join(
+          y = geo_estados,
+          by = c("uf_sigla" = "abbrev_state")
+        ) |>
+        # transformar novamente para geo
+        sf::st_as_sf()
+
+      # criar vetor para as cores
+      cores <- leaflet::colorNumeric(
+        palette = rev(viridis::plasma(8)), # vetor de cores
+        domain = tab_mapa$media # domínio/abrangência que a função vai alocar as cores
+      )
+
+        # jogar dados no mapa
+      tab_mapa |>
+        leaflet::leaflet() |>
+        leaflet::addTiles() |>
+        leaflet::addPolygons(
+          fillColor = ~cores(media),
+          color = "black",
+          fillOpacity = 0.8,
+          weight = 1,
+          label = ~name_state
+        ) |>
+        leaflet::addLegend(
+          pal = cores,
+          values = ~media,
+          opacity = 0.7,
+          title = NULL,
+          position = "bottomright"
+        )
+    })
+
+
   })
 }
 

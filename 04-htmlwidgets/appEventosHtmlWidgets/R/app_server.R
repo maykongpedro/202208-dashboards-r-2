@@ -7,5 +7,6 @@
 app_server <- function(input, output, session) {
   # Your application server logic
   mod_reactable_server("reactable_1")
+  mod_leaflet_server("leaflet_1")
 
 }
