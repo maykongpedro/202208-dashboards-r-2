@@ -97,6 +97,34 @@ mod_leaflet_server <- function(id){
     })
 
 
+    # output tabela -----------------------------------------------------------
+    output$tabela <- reactable::renderReactable({
+
+      # seleção de estado
+      estado <- "RJ"
+
+      # filtrar base e organizar dados
+      pnud |>
+        dplyr::filter(
+          uf_sigla == estado,
+          ano == filter_values()$ano
+        ) |>
+        dplyr::arrange(dplyr::desc(.data[[filter_values()$metrica]])) |>
+        dplyr::slice(1:10) |>
+        dplyr::select(
+          muni_nm,
+          one_of(filter_values()$metrica),
+          espvida,
+          idhm,
+          rdpc,
+          gini
+        ) |>
+        # gerar a tabela
+        reactable::reactable()
+
+
+    })
+
   })
 }
 
