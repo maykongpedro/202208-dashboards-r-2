@@ -22,6 +22,11 @@ app_ui <- function(request) {
             text = "Leaflet",
             tabName = "leaflet",
             icon = icon("map")
+          ),
+          bs4Dash::bs4SidebarMenuItem(
+            text = "Plotly",
+            tabName = "plotly",
+            icon = icon("line-chart")
           )
         )
       ),
@@ -36,6 +41,11 @@ app_ui <- function(request) {
             # adicionar módulo leaflet__ui
             tabName = "leaflet",
             mod_leaflet_ui("leaflet_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "plotly",
+            # adicionar módulo plotly_ui
+            mod_plotly_ui("plotly_ui_1")
           )
         )
       )
