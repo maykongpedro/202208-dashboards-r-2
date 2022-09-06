@@ -76,7 +76,10 @@ mod_plotly_server <- function(id){
       } else {
         pnud_filtrada() |>
           # cortar somente a linha que representa o número do ponto selecionado
-          dplyr::slice(ponto_selecionado$pointNumber) |>
+          # precisar somar 1 porque como o plotly utilizada uma biblioteca em
+          # javascript o índice começa no 0, então precisamos somar 1 pra que
+          # o índice faça sentido dentro do R
+          dplyr::slice(ponto_selecionado$pointNumber + 1) |>
           dplyr::select(
             muni_nm,
             rdpc,
