@@ -56,7 +56,21 @@ mod_echarts_server <- function(id){
         # echarts4r::e_tooltip()
         nossa_e_tooltip(
           # testando uma string aleatória
-          formatter = "texto"
+          # formatter = "texto",
+
+          # essa primeira tentativa funciona porém não retorna o resultado esperado,
+          # porque o value é uma concateção do eixo x e y
+          # gerando o texto que irá aparecer na tooltip
+          formatter = glue::glue(
+
+            # fonte: https://echarts.apache.org/en/option.html#tooltip.formatter
+            "{b}<br>[filter_values()$metrica]: {c}",
+
+            # trocar a notação do glue para nao gerar problemas ao lançar o texto
+            .open = "[",
+            .close = "]"
+          )
+
         )
 
     })
