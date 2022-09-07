@@ -27,6 +27,11 @@ app_ui <- function(request) {
             text = "Plotly",
             tabName = "plotly",
             icon = icon("line-chart")
+          ),
+          bs4Dash::bs4SidebarMenuItem(
+            text = "Echarts",
+            tabName = "echarts",
+            icon = icon("bar-chart")
           )
         )
       ),
@@ -46,6 +51,11 @@ app_ui <- function(request) {
             tabName = "plotly",
             # adicionar módulo plotly_ui
             mod_plotly_ui("plotly_ui_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "echarts",
+            # adicionar módulo echarts_ui
+            mod_echarts_ui("echarts_1")
           )
         )
       )
