@@ -50,10 +50,14 @@ mod_echarts_server <- function(id){
         dplyr::summarise(
           media = mean(.data[[filter_values()$metrica]])
         ) |>
-        dplyr::arrange(media) |>
+        dplyr::arrange(dplyr::desc(media)) |>
         echarts4r::e_chart(x = uf_sigla) |>
         echarts4r::e_bar(serie = media, legend = FALSE) |>
-        echarts4r::e_tooltip()
+        # echarts4r::e_tooltip()
+        nossa_e_tooltip(
+          # testando uma string aleatória
+          formatter = "texto"
+        )
 
     })
 
