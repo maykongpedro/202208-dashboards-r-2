@@ -37,6 +37,26 @@ mod_echarts_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # obter filtros -----------------------------------------------------------
+    filter_values <- mod_filtro_server("filtro_1")
+
+
+    # outputt gráfico ---------------------------------------------------------
+    output$grafico <- echarts4r::renderEcharts4r({
+
+      pnud |>
+        dplyr::filter(ano == filter_values()$ano) |>
+        dplyr::group_by(uf_sigla) |>
+        dplyr::summarise(
+          media = mean(.data[[filter_values()$metrica]])
+        ) |>
+        dplyr::arrange(media) |>
+        echarts4r::e_chart(x = uf_sigla) |>
+        echarts4r::e_bar(serie = media, legend = FALSE) |>
+        echarts4r::e_tooltip()
+
+    })
+
   })
 }
 
