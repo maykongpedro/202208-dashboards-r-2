@@ -41,14 +41,33 @@ mod_echarts_server <- function(id){
     filter_values <- mod_filtro_server("filtro_1")
 
 
-    # outputt gráfico ---------------------------------------------------------
+    # output gráfico ---------------------------------------------------------
     output$grafico <- echarts4r::renderEcharts4r({
+
+      # criar uma função javascript personalizada para exibir uma tooltip
+      tooltip <- htmlwidgets::JS(
+        glue::glue(
+          "function (params) {
+          // printar o objeto params na página para poder identificar o que preciso capturar
+          console.log(params);
+
+          // criar variável que recebe o atributo name do 'params'
+          tx = params.name + '<br>' + '{{filter_values()$metrica}}: ' + params.value[1];
+
+          // retorna a variável tx
+          return(tx)
+        }",
+        .open = "{{", # trocar a notação do glue para nao gerar problemas com o javascript
+        .close = "}}" # trocar a notação do glue para nao gerar problemas com o javascript
+      )
+      )
 
       pnud |>
         dplyr::filter(ano == filter_values()$ano) |>
         dplyr::group_by(uf_sigla) |>
         dplyr::summarise(
-          media = mean(.data[[filter_values()$metrica]])
+          media = mean(.data[[filter_values()$metrica]]),
+          media = round(media, 2) # arredondar para duas casas decimais
         ) |>
         dplyr::arrange(dplyr::desc(media)) |>
         echarts4r::e_chart(x = uf_sigla) |>
@@ -61,15 +80,16 @@ mod_echarts_server <- function(id){
           # essa primeira tentativa funciona porém não retorna o resultado esperado,
           # porque o value é uma concateção do eixo x e y
           # gerando o texto que irá aparecer na tooltip
-          formatter = glue::glue(
+          # formatter = glue::glue(
+          #
+          #   # fonte: https://echarts.apache.org/en/option.html#tooltip.formatter
+          #   "{b}<br>[filter_values()$metrica]: {c}",
+          #   .open = "[", # trocar a notação do glue para nao gerar problemas ao lançar o texto
+          #   .close = "]" # trocar a notação do glue para nao gerar problemas ao lançar o texto
+          # )
 
-            # fonte: https://echarts.apache.org/en/option.html#tooltip.formatter
-            "{b}<br>[filter_values()$metrica]: {c}",
-
-            # trocar a notação do glue para nao gerar problemas ao lançar o texto
-            .open = "[",
-            .close = "]"
-          )
+          # segunda tentativa usando uma função javascript
+          formatter = tooltip
 
         )
 
