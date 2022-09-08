@@ -99,9 +99,17 @@ mod_echarts_server <- function(id){
           # )
 
           # segunda tentativa usando uma função javascript
-          formatter = tooltip
+          formatter = tooltip,
 
-        )
+          # alterar a cor da borda , caso fosse mais de uma série no gráfico,
+          # esse argumento iria receber um vetor de cores
+          borderColor = "purple",
+
+          # alterar a cor de fundo da tooltip
+          backgroundColor  =  "yellow"
+
+        ) |>
+        echarts4r::e_color(color = "purple") # alterar cor do gráfico
 
     })
 
