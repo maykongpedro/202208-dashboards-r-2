@@ -46,13 +46,23 @@ mod_echarts_server <- function(id){
 
       # criar uma função javascript personalizada para exibir uma tooltip
       tooltip <- htmlwidgets::JS(
+
+        # é necessário usar o glue para conseguir capturar o input "metrica", caso
+        # não houvesse nenhum vetor em R a ser adicionado, não haveri necessidade
+        # de usar o glue
         glue::glue(
           "function (params) {
           // printar o objeto params na página para poder identificar o que preciso capturar
           console.log(params);
 
           // criar variável que recebe o atributo name do 'params'
-          tx = params.name + '<br>' + '{{filter_values()$metrica}}: ' + params.value[1];
+          // uma alternativa para arredondar valores diretament pelo javascript
+          // é usar a função parseFloat(numero).toFixed(qtd_casas_decimais)
+          // a tag <br> é para gerar um espaço, já a tag <b> é para deixar o texto em negrito
+          // params.name adiciona o nome do eixo x selecionado
+          // params.marker adiciona a bolinha antes do nome da métrica
+          // params.value[1] captura o segundo índice dos valores da série, o primeiro item é a UF
+          tx = params.name + '<br>' + params.marker + '<b>{{filter_values()$metrica}}<b>: ' + params.value[1];
 
           // retorna a variável tx
           return(tx)
