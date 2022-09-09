@@ -32,6 +32,11 @@ app_ui <- function(request) {
             text = "Echarts",
             tabName = "echarts",
             icon = icon("bar-chart")
+          ),
+          bs4Dash::bs4SidebarMenuItem(
+            text = "Tippy",
+            tabName = "tippy",
+            icon = icon("help")
           )
         )
       ),
@@ -56,6 +61,11 @@ app_ui <- function(request) {
             tabName = "echarts",
             # adicionar módulo echarts_ui
             mod_echarts_ui("echarts_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "tippy",
+            # adicionar módulo tippy_ui
+            mod_tippy_ui("tippy_1")
           )
         )
       )
