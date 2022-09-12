@@ -68,6 +68,35 @@ mod_tippy_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # atualizar escolha dos estados de acordo com a seleção da região
+    observe({
+      uf_escolhas <- pnud |>
+        dplyr::filter(regiao_nm == input$regiao) |>
+        dplyr::pull(uf_sigla)
+
+      updateSelectInput(
+        inputId = "uf",
+        choices = uf_escolhas
+      )
+    })
+
+    # atualizar escolha dos municípios de acordo com a uf escolhida
+    observe({
+      muni_escolhas <- pnud |>
+        dplyr::filter(uf_sigla == input$uf) |>
+        dplyr::select(muni_nm, muni_id) |>
+        # deframe é para transformar a primeira coluna da tabela em um item
+        # nomeado de uma lista e a segunda coluna o valor desse item, assim
+        # poderemos passar o nome do município como filtro porém o que o filtro
+        # vai efetivamente retornar é o código único do município
+        tibble::deframe()
+
+      updateSelectInput(
+        inputId = "muni",
+        choices = muni_escolhas
+      )
+    })
+
   })
 }
 
