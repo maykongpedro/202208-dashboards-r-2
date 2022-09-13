@@ -12,67 +12,69 @@ mod_tippy_ui <- function(id){
   tagList(
     h1("Tippy"),
     hr(),
-    bs4Dash::bs4Card(
-      title = "Filtros",
-      width = 12,
-      # linha 1
-      fluidRow(
-        # coluna 1 - filtro do ano
-        column(
-          width = 3,
-          selectInput(
-            inputId = ns("ano"),
-            label = "Selecione um ano",
-            choices = sort(unique(pnud$ano))
-          )
-        ),
-        # coluna 2 - filtro da região
-        column(
-          width = 3,
-          selectInput(
-            inputId = ns("regiao"),
-            label = "Selecione uma região",
-            choices = sort(unique(pnud$regiao_nm))
-          )
-        ),
-        # coluna 3 - filtro de estado -> vai ser atualizado no server com os
-        # estados da região escolhida
-        column(
-          width = 3,
-          selectInput(
-            inputId = ns("uf"),
-            label = "Selecione um estado",
-            choices = c("Carregando..." =  "")
-          )
-        ),
-        # coluna 4 - filtro de município -> vai ser atualizado no server com os
-        # municípios do estado escolhido
-        column(
-          width = 3,
-          selectInput(
-            inputId = ns("muni"),
-            label = "Selecione um município",
-            choices = c("Carregando..." = "")
-          )
+    fluidRow(
+      bs4Dash::bs4Card(
+        title = "Filtros",
+        width = 12,
+        # linha 1
+        fluidRow(
+          # coluna 1 - filtro do ano
+          column(
+            width = 3,
+            selectInput(
+              inputId = ns("ano"),
+              label = "Selecione um ano",
+              choices = sort(unique(pnud$ano))
+            )
+          ),
+          # coluna 2 - filtro da região
+          column(
+            width = 3,
+            selectInput(
+              inputId = ns("regiao"),
+              label = "Selecione uma região",
+              choices = sort(unique(pnud$regiao_nm))
+            )
+          ),
+          # coluna 3 - filtro de estado -> vai ser atualizado no server com os
+          # estados da região escolhida
+          column(
+            width = 3,
+            selectInput(
+              inputId = ns("uf"),
+              label = "Selecione um estado",
+              choices = c("Carregando..." =  "")
+            )
+          ),
+          # coluna 4 - filtro de município -> vai ser atualizado no server com os
+          # municípios do estado escolhido
+          column(
+            width = 3,
+            selectInput(
+              inputId = ns("muni"),
+              label = "Selecione um município",
+              choices = c("Carregando..." = "")
+            )
 
-        )
-      ),
-      # linha 2
-      fluidRow(
-        column(
-          width = 2,
-          offset = 5,
-          actionButton(
-            inputId = ns("pesquisar"),
-            label = "Pesquisar"
           )
         ),
-        # espaço
-        br(),
-        # output
-        reactable::reactableOutput(outputId = ns("tabela"))
+        # linha 2
+        fluidRow(
+          column(
+            width = 2,
+            offset = 5,
+            actionButton(
+              inputId = ns("pesquisar"),
+              label = "Pesquisar"
+            )
+          )
+        )
       )
-    )
+    ),
+    # espaço
+    br(),
+    # output
+    reactable::reactableOutput(outputId = ns("tabela"))
   )
 }
 
@@ -112,13 +114,20 @@ mod_tippy_server <- function(id){
       )
     })
 
-    # tabela
-    output$tabela <- reactable::renderReactable({
-      pnud |>
-        dplyr::filter(
+    # tabela filtrada -------------------------------------------------
+    # gerar a pnud filtrada somente quando o botão de pesquisar for clicado
+    pnud_filtrada <- eventReactive(input$pesquisar, {
+
+      pnud |> dplyr::filter(
           ano == input$ano,
           muni_id == input$muni
-        ) |>
+        )
+    })
+
+
+    # output tabela ---------------------------------------------------
+    output$tabela <- reactable::renderReactable({
+      pnud_filtrada() |>
         dplyr::select(
           Município = muni_nm,
           População = pop,
