@@ -56,6 +56,21 @@ mod_tippy_ui <- function(id){
           )
 
         )
+      ),
+      # linha 2
+      fluidRow(
+        column(
+          width = 2,
+          offset = 5,
+          actionButton(
+            inputId = ns("pesquisar"),
+            label = "Pesquisar"
+          )
+        ),
+        # espaço
+        br(),
+        # output
+        reactable::reactableOutput(outputId = ns("tabela"))
       )
     )
   )
@@ -96,6 +111,25 @@ mod_tippy_server <- function(id){
         choices = muni_escolhas
       )
     })
+
+    # tabela
+    output$tabela <- reactable::renderReactable({
+      pnud |>
+        dplyr::filter(
+          ano == input$ano,
+          muni_id == input$muni
+        ) |>
+        dplyr::select(
+          Município = muni_nm,
+          População = pop,
+          IDHM = idhm,
+          `Esp. Vida` = espvida,
+          `Renda per capita` = rdpc,
+          GINI = gini
+        ) |>
+        reactable::reactable()
+    })
+
 
   })
 }
