@@ -67,6 +67,18 @@ app_ui <- function(request) {
             # adicionar módulo tippy_ui
             mod_tippy_ui("tippy_1")
           )
+        ),
+        # adicionar scripts necessários para poder usar a biblioteca javascript
+        # de tooltip customizável
+        tags$script(
+          src = "https://unpkg.com/@popperjs/core@2"
+        ),
+        tags$script(
+          src = "https://unpkg.com/tippy.js@6"
+        ),
+        # adicionar script customizável JS que possui uma tooltip alterada
+        tags$script(
+          src = "www/tooltip.js"
         )
       )
     )
@@ -89,10 +101,14 @@ golem_add_external_resources <- function() {
 
   tags$head(
     favicon(),
-    bundle_resources(
-      path = app_sys("app/www"),
-      app_title = "appEventosHtmlWidgets"
-    )
+    # Necessário desativas essa parte para o script customizado JS não ser carregado
+    # automaticamente ao iniciar o app, pois se não seria carregador no header,
+    # porém a biblioteca javascript da tooltip diz que a importação delas deve
+    # ocorrer antes
+    # bundle_resources(
+    #   path = app_sys("app/www"),
+    #   app_title = "appEventosHtmlWidgets"
+    # )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
