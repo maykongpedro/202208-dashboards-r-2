@@ -70,6 +70,7 @@ app_ui <- function(request) {
         ),
         # adicionar scripts necessários para poder usar a biblioteca javascript
         # de tooltip customizável
+        # fonte: https://atomiks.github.io/tippyjs/v6/getting-started/
         tags$script(
           src = "https://unpkg.com/@popperjs/core@2"
         ),

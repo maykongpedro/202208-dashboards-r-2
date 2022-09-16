@@ -66,12 +66,17 @@ mod_tippy_ui <- function(id){
             # testando o pacote tippy
             # por alguma motivo existe um problema de compatibilidade entre o
             # css do bs4Dash e o pacote tippy, então ela acaba não aparecendo
-            tippy::with_tippy(
-              element = actionButton(
-                inputId = ns("pesquisar"),
-                label = "Pesquisar"
-              ),
-              tooltip = "Clique aqui"
+            # tippy::with_tippy(
+            #   element = actionButton(
+            #     inputId = ns("pesquisar"),
+            #     label = "Pesquisar"
+            #   ),
+            #   tooltip = "Clique aqui"
+            # )
+
+            actionButton(
+              inputId = ns("pesquisar"),
+              label = "Pesquisar"
             )
 
           )
