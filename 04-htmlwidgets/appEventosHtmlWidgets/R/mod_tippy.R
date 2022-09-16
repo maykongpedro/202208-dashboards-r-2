@@ -21,10 +21,14 @@ mod_tippy_ui <- function(id){
           # coluna 1 - filtro do ano
           column(
             width = 3,
-            selectInput(
-              inputId = ns("ano"),
-              label = "Selecione um ano",
-              choices = sort(unique(pnud$ano))
+            # add o input dentro de um element html para poder capturar na tooltip
+            div(
+              id = "filtro_ano",
+              selectInput(
+                inputId = ns("ano"),
+                label = "Selecione um ano",
+                choices = sort(unique(pnud$ano))
+              )
             )
           ),
           # coluna 2 - filtro da região
