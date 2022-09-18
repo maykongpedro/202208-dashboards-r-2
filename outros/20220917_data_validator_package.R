@@ -1,4 +1,8 @@
 
+
+# Example 1 ---------------------------------------------------------------
+# Fonte: https://appsilon.github.io/data.validator/articles/data_validator.html
+
 library(assertr)
 library(dplyr)
 library(data.validator)
@@ -22,6 +26,57 @@ validate(mtcars) %>%
     add_results(report)
 
 report
+
+report |> save_report(
+    output_file = "20220917_report_exampe.html",
+    output_dir = "outros/"
+    )
+
+report <- NULL
+
+# Example 2 ---------------------------------------------------------------
+# Fonte: https://github.com/Appsilon/data.validator/tree/master/examples/minimal_example
+
+# Data comes from tidy tuesday
+beer_states <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv')
+
+# See data structure
+beer_states |> dplyr::glimpse()
+
+# Create report
+report <- data.validator::data_validation_report()
+
+# Validate pipeline
+beer_states |> 
+    data.validator::validate() |> 
+    data.validator::validate_cols(
+        # description = "No NA's inside barrels column", 
+        description = "Nao pode haver 'NAs' na coluna 'barrels'", 
+        assertr::not_na, # using function of assertr packcage to be more easy
+        cols = barrels  # cols to do this validation
+    ) |> 
+    data.validator::validate_if(
+        # description = "Check if year is in correct range (2008, 2018)", 
+        description = "Checar se o ano está no intervalo correto (2008, 2018)",
+        year >= 2008 && year <= 2018 # do the validation using the column name directly
+        ) |> 
+    # add to the report
+    data.validator::add_results(report)
+
+report
+
+report |> data.validator::save_report(
+    output_file = "20220917_report_exampe_2.html",
+    output_dir = "outros/"
+    # success = FALSE # don't show te success validations
+    )
+
+
+
+
+
+
+
 
 
 
