@@ -209,6 +209,32 @@ validator |> data.validator::save_summary(
 
 
 
+# Example 4 ---------------------------------------------------------------
+# Fonte: https://github.com/Appsilon/data.validator/blob/master/examples/shiny_app/shiny_example.R
+
+ui <- shiny::fluidPage(
+    shiny::uiOutput("validation")
+)
+
+server <- function(input, output, session) {
+    report <- data.validator::data_validation_report()
+    
+    mtcars |> 
+        data.validator::validate(name = "Verifying cars dataset") |>
+        data.validator::validate_if(drat > 0, description = "Column drat has only positive values") |>
+        data.validator::validate_cols(assertr::in_set(c(0, 2)), vs, am, description = "vs and am values equal 0 or 2 only") |>
+        data.validator::validate_cols(assertr::within_n_sds(1), mpg, description = "mpg within 1 sds") |>
+        data.validator::validate_rows(assertr::num_row_NAs, assertr::within_bounds(0, 2), vs, am, mpg, description = "not too many NAs in rows") |>
+        data.validator::validate_rows(assertr::maha_dist, assertr::within_n_mads(10), dplyr::everything(), description = "maha dist within 10 mads") |>
+        data.validator::add_results(report)
+    
+    output$validation <- shiny::renderUI({
+        data.validator::render_semantic_report_ui(data.validator::get_results(report))
+    })
+}
+
+shiny::shinyApp(ui, server)
+
 
 
 
