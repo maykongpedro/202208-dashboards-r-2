@@ -9,18 +9,18 @@ library(data.validator)
 
 report <- data_validation_report()
 
-validate(mtcars) %>%
+validate(mtcars) |>
     validate_cols(description = "vs and am values equal 0 or 2 only",
-                  in_set(c(0, 2)), vs, am) %>%
+                  in_set(c(0, 2)), vs, am) |>
     validate_cols(description = "vs and am values should equal 3 or 4",
                   skip_chain_opts = TRUE,
-                  error_fun = warning_append, in_set(c(3, 4)), gear, carb) %>%
+                  error_fun = warning_append, in_set(c(3, 4)), gear, carb) |>
     validate_rows(description = "Each row sum for am:vs columns is less or equal 1",
-                  rowSums, within_bounds(0, 1), vs:am) %>%
+                  rowSums, within_bounds(0, 1), vs:am) |>
     validate_cols(description = "For wt and qsec we have: abs(col) < 2 * sd(col)",
-                  within_n_sds(2), wt, qsec) %>%
+                  within_n_sds(2), wt, qsec) |>
     validate_if(description = "Column drat has only positive values",
-                drat > 0) %>%
+                drat > 0) |>
     validate_if(description = "Column drat has only values larger than 3",
                 drat > 3) |> 
     add_results(report)
@@ -70,6 +70,129 @@ report |> data.validator::save_report(
     output_dir = "outros/"
     # success = FALSE # don't show te success validations
     )
+
+
+
+# Example 3 ---------------------------------------------------------------
+# Fonte: https://github.com/Appsilon/data.validator/blob/master/examples/sample_validations/example.R
+
+
+validator <- data.validator::data_validation_report()
+
+mtcars |> 
+    data.validator::validate() |>
+    data.validator::validate_cols(
+        description = "No NA's inside mpg:carb columns",
+        predicate = assertr::not_na,
+        mpg:carb
+    ) |>
+    data.validator::validate_cols(
+        description = "vs and am values equal 0 or 2 only", 
+        predicate = assertr::in_set(c(0, 2)), 
+        vs, 
+        am
+    ) |>
+    data.validator::validate_cols(
+        description = "vs and am values should equal 3 or 4",
+        skip_chain_opts = TRUE,
+        error_fun = assertr::warning_append,
+        predicate = assertr::in_set(c(3, 4)),
+        gear,
+        carb
+    ) |>
+    data.validator::validate_rows(
+        description = "Each row sum for am:vs columns is less or equal 2",
+        rowSums, 
+        assertr::within_bounds(0, 2), 
+        vs:am
+    ) |>
+    data.validator::validate_rows(
+        description = "Each row sum for am:vs columns is less or equal 1",
+        rowSums, 
+        assertr::within_bounds(0, 1), 
+        vs:am
+    ) |>
+    data.validator::validate_cols(
+        description = "For wt and qsec we have: abs(col) < 4 * sd(col)", 
+        assertr::within_n_sds(4), 
+        wt, 
+        qsec
+    ) |>
+    data.validator::validate_cols(
+        description = "For wt and qsec we have: abs(col) < 2 * sd(col)", 
+        assertr::within_n_sds(2), 
+        wt, 
+        qsec
+    ) |>
+    data.validator::validate_rows(
+        description = "Using mpg:carb mahalanobis distance for each observation is within 30 median absolute deviations from the median",
+        row_reduction_fn = assertr::maha_dist,
+        assertr::within_n_mads(30),
+        mpg:carb
+    ) |>
+    data.validator::validate_rows(
+        description = "Using mpg:carb mahalanobis distance for each observation is within 3 median absolute deviations from the median",
+        row_reduction_fn = assertr::maha_dist,
+        assertr::within_n_mads(3),
+        mpg:carb
+    ) |>
+    data.validator::validate_if(
+        description = "Column drat has only positive values", 
+        drat > 0
+    ) |>
+    data.validator::validate_if(
+        description = "Column drat has only values larger than 3", 
+        drat > 3
+    ) |>
+    data.validator::add_results(validator)
+
+
+data.validator::get_results(validator)
+
+
+validator |> data.validator::save_report(
+    output_file = "20220918_validation_report_example_3.html",
+    output_dir = "outros/"
+)
+
+browseURL("outros/20220918_validation_report_example_3.html")
+
+
+validator |> data.validator::save_report(
+    output_file = "20220918_validation_report_example_3_raw.html",
+    ui_constructor = data.validator::render_raw_report_ui,
+    output_dir = "outros/"
+    )
+
+browseURL("outros/20220918_validation_report_example_3_raw.html")
+
+
+validator |> data.validator::save_results(
+    file_name = "outros/20220918_results_example_3.csv"
+    )
+
+validator |> data.validator::save_summary(
+    file_name = "outros/20220918_validation_log_example_3.txt"
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
