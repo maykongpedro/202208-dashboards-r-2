@@ -16,8 +16,11 @@ tippy('#tippy_1-pesquisar', {
 
         // Impede a tooltip de desaparecer após o click, não é o desejável nesse app
         // fonte: https://atomiks.github.io/tippyjs/v6/all-props/#hideonclick
-        hideOnClick: false
+        hideOnClick: false,
 
+        // Exibe a tooltip no lado direito, o padrão é exibir em cima
+        // fonte: https://atomiks.github.io/tippyjs/v6/all-props/#placement
+        placement: "right"
   });
 
 
