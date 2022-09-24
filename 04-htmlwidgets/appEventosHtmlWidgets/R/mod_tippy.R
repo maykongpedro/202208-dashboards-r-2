@@ -34,32 +34,43 @@ mod_tippy_ui <- function(id){
           # coluna 2 - filtro da região
           column(
             width = 3,
-            selectInput(
-              inputId = ns("regiao"),
-              label = "Selecione uma região",
-              choices = sort(unique(pnud$regiao_nm))
+            # add o input dentro de um elemento HTML para capturar na tooltip
+            div(
+              id = "filtro_regiao",
+              selectInput(
+                inputId = ns("regiao"),
+                label = "Selecione uma região",
+                choices = sort(unique(pnud$regiao_nm))
+              )
             )
           ),
           # coluna 3 - filtro de estado -> vai ser atualizado no server com os
           # estados da região escolhida
           column(
             width = 3,
-            selectInput(
-              inputId = ns("uf"),
-              label = "Selecione um estado",
-              choices = c("Carregando..." =  "")
+            # add o input dentro de um elemento HTML para capturar na tooltip
+            div(
+              id = "filtro_estado",
+              selectInput(
+                inputId = ns("uf"),
+                label = "Selecione um estado",
+                choices = c("Carregando..." =  "")
+              )
             )
           ),
           # coluna 4 - filtro de município -> vai ser atualizado no server com os
           # municípios do estado escolhido
           column(
             width = 3,
-            selectInput(
-              inputId = ns("muni"),
-              label = "Selecione um município",
-              choices = c("Carregando..." = "")
+            # add o input dentro de um elemento HTML para capturar na tooltip
+            div(
+              id = "filtro_muni",
+              selectInput(
+                inputId = ns("muni"),
+                label = "Selecione um município",
+                choices = c("Carregando..." = "")
+              )
             )
-
           )
         ),
         # linha 2
