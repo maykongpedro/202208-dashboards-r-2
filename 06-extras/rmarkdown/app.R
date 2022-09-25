@@ -3,7 +3,11 @@ library(shiny)
 dados <- readr::read_rds("pkmn.rds")
 
 ui <- fluidPage(
+  
+  # adicionar margem na parte inferior do app
   style = "margin-bottom: 200px;",
+  
+  # definir a versão do bootstrap
   theme = bslib::bs_theme(version = 4),
   h1("Relatórios em R Markdown dentro do Shiny"),
   hr(),
@@ -20,6 +24,9 @@ ui <- fluidPage(
   ),
   hr(),
   fluidRow(
+    
+    # centraliar todos os inputs na mesma linha
+    # fonte: https://getbootstrap.com/docs/4.6/layout/grid/#vertical-alignment
     class = "align-items-center",
     column(
       width = 4,
