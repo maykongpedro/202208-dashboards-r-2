@@ -4,12 +4,16 @@ title: "Pokemon"
 # adicionar parâmetros no relatório
 params: 
     pokemon: "bulbasaur"
+    cor: "black"
     # tipo: "grama"
 # author: "Author Name"
 # date: "Date"
 output: 
   pagedreport::paged_windmill:
+    # por algum motivo ele dá erro na hora de trocar pro logo customizado
+    # logo: "logo.png"
     logo: "https://mk0rfortheresto0o08q.kinstacdn.com/wp-content/uploads/2020/08/rru-logo-blue.svg"
+    front_img: "capa.jpg"
     img_to_dark: FALSE
     logo_to_white: TRUE
 # imprimir em pdf
@@ -18,17 +22,63 @@ main-color: "#6cabdd"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
-# Título
 
 ```{r}
-params$pokemon
+
+dados <- readr::read_rds("pkmn.rds")
+
+pkmn <- params$pokemon
+
+id <- dados |>
+  dplyr::filter(pokemon == pkmn) |>
+  dplyr::pull(id) |>
+  stringr::str_pad(width = 3, side = "left", pad = "0")
+
+imagem <- glue::glue(
+  "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/{id}.png"
+)
 ```
+
 
 ---
 subtitle: `r params$pokemon`
+main-color: `r params$cor``
 ---
+
+# `r pkmn` {-}
+
+<center>
+```{r}
+knitr::include_graphics(imagem)
+```
+<center>
+
+
+```{r}
+dados |> 
+  dplyr::filter(pokemon == pkmn) |> 
+  dplyr::select(
+    HP = hp,
+    ATK = ataque,
+    DEF = defesa,
+    VEL = velocidade,
+    `ATK ESP` = ataque_especial,
+    `DEF ESP` = defesa_especial
+  ) |> 
+  reactable::reactable()
+```
+
+
+```{r}
+# necessário para as reactables funcionarem dentro do relatório
+```
+
+
+<div style = "display: none;">
+$$
+1
+$$
 
