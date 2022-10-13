@@ -1,6 +1,6 @@
 library(shiny)
 
-dados <- readr::read_rds("pkmn.rds")
+dados <- readr::read_rds(here::here("06-extras/rmarkdown/pkmn.rds"))
 
 ui <- fluidPage(
   
