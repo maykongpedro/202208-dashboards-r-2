@@ -55,30 +55,34 @@ server <- function(input, output, session) {
         fileext = ".html"
       )
 
+      # obter cor relativa ao tipo de pokemon
       cor <- dados$cor_1[dados$pokemon == input$pokemon]
 
-      withProgress(message = "Renderizando o html", {
+      # adicionar barra de progresso para identificar o que está acontecendo
+      shiny::withProgress(message = "Renderizando o html", {
+        
+        shiny::incProgress(0.2) # + 20%
 
-        incProgress(0.2)
-
+        # renderizar relatório
         rmarkdown::render(
           input = "template_relatorio.Rmd",
           output_file = arquivo_html,
+          # passar os parâmetros para o relatório
           params = list(pokemon = input$pokemon, cor = cor)
         )
 
-        incProgress(0.5, message = "Renderizando o PDF...")
+        incProgress(0.5, message = "Renderizando o PDF...") # + 50% = 70%
 
+        # imprimir relatório em pdf
         pagedown::chrome_print(
           input = arquivo_html,
           output = file
         )
 
-        incProgress(0.3)
+        # fechando o total da barrinha de progresso
+        incProgress(0.3) # + 30% = 100%
 
       })
-
-
 
     }
   )
