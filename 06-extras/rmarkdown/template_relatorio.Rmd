@@ -44,8 +44,8 @@ imagem <- glue::glue(
 
 
 ---
-subtitle: `r params$pokemon`
-main-color: `r params$cor``
+subtitle: "`r params$pokemon`"
+main-color: "`r params$cor`"
 ---
 
 # `r pkmn` {-}
@@ -82,3 +82,4 @@ $$
 1
 $$
 
+</div>
