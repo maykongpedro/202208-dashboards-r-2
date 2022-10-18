@@ -1,0 +1,14 @@
+name: appEventosHtmlWidgets
+title: appEventosHtmlWidgets
+username:
+account: maykon-gabriel
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7347701
+bundleId: 6417104
+url: https://maykon-gabriel.shinyapps.io/appEventosHtmlWidgets/
+when: 1666135123.29516
+lastSyncTime: 1666135123.29517
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data-raw/geo_estados.R|data-raw/geo_estados.rds|data-raw/pnud_min.rds|data-raw/pnud.R
