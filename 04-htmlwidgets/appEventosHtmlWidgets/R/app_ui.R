@@ -37,6 +37,11 @@ app_ui <- function(request) {
             text = "Tippy",
             tabName = "tippy",
             icon = icon("help")
+          ),
+          bs4Dash::bs4SidebarMenuItem(
+            text = "Reactable com SQL",
+            tabName = "reactable_sql",
+            icon = icon("table")
           )
         )
       ),
@@ -66,6 +71,11 @@ app_ui <- function(request) {
             tabName = "tippy",
             # adicionar módulo tippy_ui
             mod_tippy_ui("tippy_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "reactable_sql",
+            # adicionar módulo reactable_db_ui
+            mod_reactable_db_ui("reactable_db_1")
           )
         ),
         # adicionar scripts necessários para poder usar a biblioteca javascript
