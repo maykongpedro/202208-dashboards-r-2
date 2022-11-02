@@ -8,15 +8,14 @@ app_server <- function(input, output, session) {
   # Your application server logic
 
    # fazer conexão com o banco de dados
-   conexao <- RSQLite::dbConnect(RSQLite::SQLite(), "pnud_min.sqlite")
+   con <- RSQLite::dbConnect(RSQLite::SQLite(), "data-raw/pnud_min.sqlite")
 
    # obter todos os dados e adicionálos em um objeto
    # essa não é uma boa prática pois acaba carrengando a base toda
    # tbl_pnud <- dplyr::tbl(conexao, "pnud") |> dplyr::collect()
 
    # apenas fazer conexão sem trazer todos os dados
-   # por enquanto não está funcionando
-   # tbl_pnud <- dplyr::tbl(conexao, "pnud")
+   tbl_pnud <- dplyr::tbl(con, "pnud")
 
   # mod_reactable_db_server("reactable_db_1", tbl_pnud)
   mod_reactable_server("reactable_1")
