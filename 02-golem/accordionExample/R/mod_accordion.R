@@ -25,7 +25,36 @@ mod_accordion_ui <- function(id){
       # título 2
       h2("KPI Placeholder"),
       # espaço em branco
-      br()
+      br(),
+
+      # accordion
+      div(
+        class = "ui accordion",
+
+        # 1.1 título
+        div(
+          class = "title active",
+          h4(class = "ui dividing header", "Viagem")
+        ),
+
+        # 1.2 conteúdo
+        div(
+          class = "content active",
+          p("Conteúdo Placeholder")
+        ),
+
+        # 2.1 título
+        div(
+          class = "title",
+          h4(class = "ui dividing header", "Habitação")
+        ),
+
+        # 2.2 conteúdo
+        div(
+          class = "content",
+          p("Conteúdo Placeholder")
+        )
+      )
     )
 
   )
