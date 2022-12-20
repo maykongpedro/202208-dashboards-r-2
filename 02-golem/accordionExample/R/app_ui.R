@@ -32,9 +32,8 @@ app_ui <- function(request) {
 
         div(
           class = "three wide column",
-          style = "min-width: 350px;"
-          # adicionando módulo
-          # accordionMasterUI("accordion")
+          style = "min-width: 350px;",
+          mod_accordion_ui("accordion_1")
         ),
 
         div(

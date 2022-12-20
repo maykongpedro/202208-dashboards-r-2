@@ -7,7 +7,7 @@
 app_server <- function(input, output, session) {
   # Your application server logic
 
-    # accordionMasterServer("accordion")
+    mod_accordion_server("accordion_1")
 
     # output$test_table <- renderTable({
     #     total_estimates
