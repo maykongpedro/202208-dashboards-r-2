@@ -9,9 +9,9 @@ app_server <- function(input, output, session) {
 
     mod_accordion_server("accordion_1")
 
-    # output$test_table <- renderTable({
-    #     total_estimates
-    # })
+    output$test_table <- renderTable({
+        total_estimates
+    })
 
 }
 

@@ -41,8 +41,8 @@ app_ui <- function(request) {
           h3("Total por categoria"),
           div(
             class = "ui raised segment",
-            style = "min-width: 550px;"
-            # tableOutput(outputId = "test_table")
+            style = "min-width: 550px;",
+            tableOutput(outputId = "test_table")
           )
         )
       )
