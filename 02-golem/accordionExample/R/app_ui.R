@@ -12,19 +12,9 @@ app_ui <- function(request) {
     shiny.semantic::semanticPage(
       h2("Exemplo de Accordions"),
 
-      # exemplo de círculo aleatório para testar css
-      # div(
-      #     class = "ui inverted circular segment",
-      #     h2(
-      #         class = "ui inverted header",
-      #         "Buy Now",
-      #         div(
-      #             class = "sub header",
-      #             "$10,99"
-      #         )
-      #     )
-      # ),
-      # br(),
+      # mod_additional_css_itens_ui("additional_css_itens_1"),
+
+      br(),
 
       div(
         # classe para controlar a posição dos itens, é como uma shiny::column()
