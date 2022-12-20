@@ -11,6 +11,14 @@ mod_accordion_ui <- function(id){
   ns <- NS(id)
   tagList(
 
+    # carregar javascript para que o click no accordion funcione
+    # shiny::tags$script(src = "www/accordion.js"), # nao funcionou
+    shiny::tags$script(
+      "$(document).ready(function() {
+       $('.ui.accordion').accordion();
+       })"
+    ),
+
     # h2 e h3 são utilizados para definir como os títulos irão aparecer
     div(
       # escolha dessa classe por conta da borda fina que ela forma nos objetos
