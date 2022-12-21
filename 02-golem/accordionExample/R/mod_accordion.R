@@ -31,7 +31,10 @@ mod_accordion_ui <- function(id){
         "Total de emissões de CO2"
       ),
       # título 2
-      h2("KPI Placeholder"),
+      h2(
+        textOutput(outputId = ns("total_geral"))
+      ),
+
       # espaço em branco
       br(),
 
@@ -74,6 +77,18 @@ mod_accordion_ui <- function(id){
 mod_accordion_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
+    output$total_geral <- renderText({
+
+      total_estimates |>
+        dplyr::filter(total_type == "Grand") |>
+        dplyr::transmute(
+          total_geral = round(yearly_emissions, 2)
+        ) |>
+        paste0()
+
+    })
+
 
   })
 }
