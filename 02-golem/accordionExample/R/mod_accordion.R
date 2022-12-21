@@ -45,25 +45,33 @@ mod_accordion_ui <- function(id){
         # 1.1 título
         div(
           class = "title active",
-          h4(class = "ui dividing header", "Viagem")
+          h4(
+            class = "ui dividing header",
+            textOutput(outputId = ns("viagem_total"))
+            )
         ),
 
         # 1.2 conteúdo
         div(
           class = "content active",
-          p("Conteúdo Placeholder")
+          # p("Conteúdo Placeholder") # foi substituído pela tabela
+          tableOutput(outputId = ns("viagens_subtotal"))
         ),
 
         # 2.1 título
         div(
           class = "title",
-          h4(class = "ui dividing header", "Habitação")
+          h4(
+            class = "ui dividing header",
+            textOutput(outputId = ns("hospedagem_total"))
+            )
         ),
 
         # 2.2 conteúdo
         div(
           class = "content",
-          p("Conteúdo Placeholder")
+          # p("Conteúdo Placeholder") # foi substituído pela tabela
+          tableOutput(outputId = ns("hospedagem_subtotal"))
         )
       )
     )
@@ -79,14 +87,62 @@ mod_accordion_server <- function(id){
     ns <- session$ns
 
     output$total_geral <- renderText({
-
       total_estimates |>
         dplyr::filter(total_type == "Grand") |>
         dplyr::transmute(
           total_geral = round(yearly_emissions, 2)
         ) |>
         paste0()
+    })
 
+    output$viagem_total <- renderText({
+      total_estimates |>
+        dplyr::filter(total_type == "Travel") |>
+        dplyr::transmute(
+          emissoes = round(yearly_emissions, 2)
+        ) |>
+        paste0("/ano")
+    })
+
+    output$viagens_subtotal <- renderTable({
+      household_estimates |>
+        dplyr::filter(categories == "Travel") |>
+        dplyr::arrange(subcategories) |>
+        dplyr::group_by(subcategories) |>
+        dplyr::summarise(
+          emissions = sum(
+            round(yearly_emissions, 2)
+          )
+        ) |>
+        dplyr::rename(
+          Subcategorias = subcategories,
+          `Emissões` = emissions
+        )
+    })
+
+    output$hospedagem_total <- renderText({
+      total_estimates |>
+        dplyr::filter(total_type == "Housing") |>
+        dplyr::transmute(
+          emissoes = round(yearly_emissions, 2)
+        ) |>
+        paste0("/ano")
+    })
+
+    output$hospedagem_subtotal <- renderTable({
+      household_estimates |>
+        dplyr::filter(categories == "Housing") |>
+        dplyr::arrange(subcategories) |>
+        dplyr::group_by(subcategories) |>
+        dplyr::summarise(
+          emissions = sum(
+            round(yearly_emissions, 2)
+          )
+        ) |>
+        dplyr::rename(
+          Subcategorias = subcategories,
+          `Emissões` = emissions
+        )
     })
 
 
