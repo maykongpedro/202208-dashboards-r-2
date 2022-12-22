@@ -7,7 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_accordion_ui <- function(id){
+mod_accordion_ui <- function(id, period){
   ns <- NS(id)
   tagList(
 
@@ -82,9 +82,10 @@ mod_accordion_ui <- function(id){
 #' accordion Server Functions
 #'
 #' @noRd
-mod_accordion_server <- function(id){
+mod_accordion_server <- function(id, period){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
 
     output$total_geral <- renderText({
       total_estimates |>
@@ -95,23 +96,35 @@ mod_accordion_server <- function(id){
         paste0()
     })
 
+
+    period <- "year"
     output$viagem_total <- renderText({
       total_estimates |>
+        # seleciona a coluna 'total_type' e todas as colunas que possuem 'year' no nome
+        dplyr::select(total_type, dplyr::contains(period)) |>
+        # renomeia a coluna 2
+        dplyr::rename(emissions = 2) |>
+        # filtra apenas o tipo 'travel'
         dplyr::filter(total_type == "Travel") |>
+        # resume a coluna emissões
         dplyr::transmute(
-          emissoes = round(yearly_emissions, 2)
+          emissoes = round(emissions, 2)
         ) |>
+        # exporta como texto
         paste0("/ano")
     })
 
+
     output$viagens_subtotal <- renderTable({
       household_estimates |>
+        dplyr::select(categories, subcategories, contains(period)) |>
+        dplyr::rename(emissions = 3) |>
         dplyr::filter(categories == "Travel") |>
         dplyr::arrange(subcategories) |>
         dplyr::group_by(subcategories) |>
         dplyr::summarise(
           emissions = sum(
-            round(yearly_emissions, 2)
+            round(emissions, 2)
           )
         ) |>
         dplyr::rename(
@@ -120,8 +133,10 @@ mod_accordion_server <- function(id){
         )
     })
 
+
     output$hospedagem_total <- renderText({
       total_estimates |>
+        dplyr::select(total_type, dplyr::contains(period)) |>
         dplyr::filter(total_type == "Housing") |>
         dplyr::transmute(
           emissoes = round(yearly_emissions, 2)
@@ -129,14 +144,17 @@ mod_accordion_server <- function(id){
         paste0("/ano")
     })
 
+
     output$hospedagem_subtotal <- renderTable({
       household_estimates |>
+        dplyr::select(categories, subcategories, contains(period)) |>
+        dplyr::rename(emissions = 3) |>
         dplyr::filter(categories == "Housing") |>
         dplyr::arrange(subcategories) |>
         dplyr::group_by(subcategories) |>
         dplyr::summarise(
           emissions = sum(
-            round(yearly_emissions, 2)
+            round(emissions, 2)
           )
         ) |>
         dplyr::rename(
@@ -144,6 +162,10 @@ mod_accordion_server <- function(id){
           `Emissões` = emissions
         )
     })
+
+
+    # Necessário adicionar essa opção para o accordion funcionar de maneira adequada
+    outputOptions(output, "hospedagem_subtotal", suspendWhenHidden = FALSE)
 
 
   })

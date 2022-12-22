@@ -23,7 +23,7 @@ app_ui <- function(request) {
         div(
           class = "three wide column",
           style = "min-width: 350px;",
-          mod_accordion_ui("accordion_1")
+          mod_accordion_ui("accordion_1", period = "year")
         ),
 
         div(
