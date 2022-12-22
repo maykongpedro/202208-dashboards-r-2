@@ -142,9 +142,10 @@ mod_accordion_server <- function(id, period){
     output$hospedagem_total <- renderText({
       total_estimates |>
         dplyr::select(total_type, dplyr::contains(period)) |>
+        dplyr::rename(emissions = 2) |>
         dplyr::filter(total_type == "Housing") |>
         dplyr::transmute(
-          emissoes = round(yearly_emissions, 2)
+          emissoes = round(emissions, 2)
         ) |>
         paste0(
           dplyr::case_when(
