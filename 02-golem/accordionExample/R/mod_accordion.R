@@ -97,7 +97,6 @@ mod_accordion_server <- function(id, period){
     })
 
 
-    period <- "year"
     output$viagem_total <- renderText({
       total_estimates |>
         # seleciona a coluna 'total_type' e todas as colunas que possuem 'year' no nome
@@ -111,7 +110,13 @@ mod_accordion_server <- function(id, period){
           emissoes = round(emissions, 2)
         ) |>
         # exporta como texto
-        paste0("/ano")
+        paste0(
+          dplyr::case_when(
+            period == "year" ~ " /ano",
+            period == "month" ~ " /mês",
+            TRUE ~ " /semana"
+          )
+        )
     })
 
 
@@ -141,7 +146,13 @@ mod_accordion_server <- function(id, period){
         dplyr::transmute(
           emissoes = round(yearly_emissions, 2)
         ) |>
-        paste0("/ano")
+        paste0(
+          dplyr::case_when(
+            period == "year" ~ " /ano",
+            period == "month" ~ " /mês",
+            TRUE ~ " /semana"
+          )
+        )
     })
 
 
