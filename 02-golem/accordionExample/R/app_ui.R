@@ -16,6 +16,17 @@ app_ui <- function(request) {
 
       br(),
 
+      selectInput(
+        inputId = "period",
+        label = "Selecione o período:",
+        choices = c(
+          "Ano" = "year",
+          "Mês" = "month",
+          "Semana" = "week"
+        )
+      ),
+      textOutput(outputId = "test_input"),
+
       div(
         # classe para controlar a posição dos itens, é como uma shiny::column()
         class = "ui stackable grid",
@@ -23,7 +34,9 @@ app_ui <- function(request) {
         div(
           class = "three wide column",
           style = "min-width: 350px;",
-          mod_accordion_ui("accordion_1", period = "year")
+          # mod_accordion_ui("accordion_1", period = input$period)
+          mod_accordion_ui("accordion_1", period = "week")
+
         ),
 
         div(
