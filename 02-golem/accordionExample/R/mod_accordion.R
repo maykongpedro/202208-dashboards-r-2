@@ -24,7 +24,16 @@ mod_accordion_ui <- function(id, period){
       # escolha dessa classe por conta da borda fina que ela forma nos objetos
       class = "ui segment",
       # título 3
-      h3("Estimativa de carbono por ano"),
+      h3(
+        paste0(
+          "Estimativa de carbono",
+          dplyr::case_when(
+            period == "year" ~ " por ano",
+            period == "month" ~ " por mês",
+            TRUE ~ " por semana"
+          )
+        )
+      ),
       # título 3
       h3(
         class = "ui grey sub header",
