@@ -13,7 +13,7 @@ app_server <- function(input, output, session) {
     })
 
     # mod_accordion_server("accordion_1", period = input$period)
-    mod_accordion_server("accordion_1", period = "week")
+    mod_accordion_server("accordion_1", period = "year")
 
     output$test_table <- renderTable({
         total_estimates
