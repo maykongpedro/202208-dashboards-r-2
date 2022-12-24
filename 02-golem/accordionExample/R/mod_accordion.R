@@ -40,9 +40,34 @@ mod_accordion_ui <- function(id, period){
         "Total de emissões de CO2"
       ),
       # título 2
-      h2(
-        textOutput(outputId = ns("total_geral"))
+      div(
+        class = "ui grid",
+        div(
+          class = "four column row",
+          # coluna 1
+          div(
+            class = "column",
+            h2(
+              class = "ui dividing header", # cria uma pequena linha embaixo do título
+              textOutput(outputId = ns("total_geral"))
+            )
+          ),
+          # coluna 2
+          div(
+            class = "column",
+            shiny::strong(
+              paste0(
+                dplyr::case_when(
+                  period == "year" ~ " /ano",
+                  period == "month" ~ " /mês",
+                  TRUE ~ " /semana"
+                )
+              )
+            )
+          )
+        )
       ),
+
 
       # espaço em branco
       br(),
@@ -98,9 +123,11 @@ mod_accordion_server <- function(id, period){
 
     output$total_geral <- renderText({
       total_estimates |>
+        dplyr::select(total_type, dplyr::contains(period)) |>
+        dplyr::rename(emissions = 2) |>
         dplyr::filter(total_type == "Grand") |>
         dplyr::transmute(
-          total_geral = round(yearly_emissions, 2)
+          total_geral = round(emissions, 2)
         ) |>
         paste0()
     })
