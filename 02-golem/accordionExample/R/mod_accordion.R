@@ -134,81 +134,22 @@ mod_accordion_server <- function(id, period){
 
 
     output$viagem_total <- renderText({
-      total_estimates |>
-        # seleciona a coluna 'total_type' e todas as colunas que possuem 'year' no nome
-        dplyr::select(total_type, dplyr::contains(period)) |>
-        # renomeia a coluna 2
-        dplyr::rename(emissions = 2) |>
-        # filtra apenas o tipo 'travel'
-        dplyr::filter(total_type == "Travel") |>
-        # resume a coluna emissões
-        dplyr::transmute(
-          emissoes = round(emissions, 2)
-        ) |>
-        # exporta como texto
-        paste0(
-          dplyr::case_when(
-            period == "year" ~ " /ano",
-            period == "month" ~ " /mês",
-            TRUE ~ " /semana"
-          )
-        )
+      CalcularTotais(categoria = "Travel", periodo = period)
     })
 
 
     output$viagens_subtotal <- renderTable({
-      household_estimates |>
-        dplyr::select(categories, subcategories, contains(period)) |>
-        dplyr::rename(emissions = 3) |>
-        dplyr::filter(categories == "Travel") |>
-        dplyr::arrange(subcategories) |>
-        dplyr::group_by(subcategories) |>
-        dplyr::summarise(
-          emissions = sum(
-            round(emissions, 2)
-          )
-        ) |>
-        dplyr::rename(
-          Subcategorias = subcategories,
-          `Emissões` = emissions
-        )
+      CalcularSubTotais(categoria = "Travel", periodo = period)
     })
 
 
     output$hospedagem_total <- renderText({
-      total_estimates |>
-        dplyr::select(total_type, dplyr::contains(period)) |>
-        dplyr::rename(emissions = 2) |>
-        dplyr::filter(total_type == "Housing") |>
-        dplyr::transmute(
-          emissoes = round(emissions, 2)
-        ) |>
-        paste0(
-          dplyr::case_when(
-            period == "year" ~ " /ano",
-            period == "month" ~ " /mês",
-            TRUE ~ " /semana"
-          )
-        )
+      CalcularTotais(categoria = "Housing", periodo = period)
     })
 
 
     output$hospedagem_subtotal <- renderTable({
-      household_estimates |>
-        dplyr::select(categories, subcategories, contains(period)) |>
-        dplyr::rename(emissions = 3) |>
-        dplyr::filter(categories == "Housing") |>
-        dplyr::arrange(subcategories) |>
-        dplyr::group_by(subcategories) |>
-        dplyr::summarise(
-          emissions = sum(
-            round(emissions, 2)
-          )
-        ) |>
-        dplyr::rename(
-          Subcategorias = subcategories,
-          `Emissões` = emissions
-        )
+      CalcularSubTotais(categoria = "Housing", periodo = period)
     })
 
 
