@@ -76,37 +76,9 @@ mod_accordion_ui <- function(id, period){
       div(
         class = "ui accordion",
 
-        # 1.1 título
-        div(
-          class = "title active",
-          h4(
-            class = "ui dividing header",
-            textOutput(outputId = ns("viagem_total"))
-            )
-        ),
+        mod_accordion_title_content_ui(ns("accordion_title_content_viagem"), active_ind = TRUE),
+        mod_accordion_title_content_ui(ns("accordion_title_content_hospedagem"), active_ind = FALSE)
 
-        # 1.2 conteúdo
-        div(
-          class = "content active",
-          # p("Conteúdo Placeholder") # foi substituído pela tabela
-          tableOutput(outputId = ns("viagens_subtotal"))
-        ),
-
-        # 2.1 título
-        div(
-          class = "title",
-          h4(
-            class = "ui dividing header",
-            textOutput(outputId = ns("hospedagem_total"))
-            )
-        ),
-
-        # 2.2 conteúdo
-        div(
-          class = "content",
-          # p("Conteúdo Placeholder") # foi substituído pela tabela
-          tableOutput(outputId = ns("hospedagem_subtotal"))
-        )
       )
     )
 
@@ -132,30 +104,17 @@ mod_accordion_server <- function(id, period){
         paste0()
     })
 
+    mod_accordion_title_content_server(
+      id = "accordion_title_content_viagem",
+      category = "Travel",
+      period = period
+    )
 
-    output$viagem_total <- renderText({
-      CalcularTotais(categoria = "Travel", periodo = period)
-    })
-
-
-    output$viagens_subtotal <- renderTable({
-      CalcularSubTotais(categoria = "Travel", periodo = period)
-    })
-
-
-    output$hospedagem_total <- renderText({
-      CalcularTotais(categoria = "Housing", periodo = period)
-    })
-
-
-    output$hospedagem_subtotal <- renderTable({
-      CalcularSubTotais(categoria = "Housing", periodo = period)
-    })
-
-
-    # Necessário adicionar essa opção para o accordion funcionar de maneira adequada
-    outputOptions(output, "hospedagem_subtotal", suspendWhenHidden = FALSE)
-
+    mod_accordion_title_content_server(
+      id = "accordion_title_content_hospedagem",
+      category = "Housing",
+      period = period
+    )
 
   })
 }
