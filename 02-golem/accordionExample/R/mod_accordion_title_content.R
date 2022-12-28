@@ -7,13 +7,14 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_accordion_title_content_ui <- function(id){
+mod_accordion_title_content_ui <- function(id, active_ind = FALSE){
   ns <- NS(id)
   tagList(
 
     # 1.1 título
     div(
-      class = "title active",
+      # definir se vai aparece ativo ou não
+      class = ifelse(active_ind == TRUE, "title active", "title"),
       h4(
         class = "ui dividing header",
         textOutput(outputId = ns("total"))
@@ -22,7 +23,7 @@ mod_accordion_title_content_ui <- function(id){
 
     # 1.2 conteúdo
     div(
-      class = "content active",
+      class = ifelse(active_ind == TRUE, "content active", "content"),
       # p("Conteúdo Placeholder") # foi substituído pela tabela
       tableOutput(outputId = ns("subtotal"))
     ),
@@ -38,12 +39,6 @@ mod_accordion_title_content_server <- function(id, category, period){
     ns <- session$ns
 
     output$total <- renderText({
-      # paste0(
-      #   "Total ",
-      #   category,
-      #   ": ",
-      #   CalcularTotais(categoria = category, periodo = period)
-      # )
       glue::glue(
         "Total {category}: {CalcularTotais(categoria = category, period = period)}"
       )
