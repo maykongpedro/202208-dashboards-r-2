@@ -17,7 +17,23 @@ mod_accordion_title_content_ui <- function(id, active_ind = FALSE){
       class = ifelse(active_ind == TRUE, "title active", "title"),
       h4(
         class = "ui dividing header",
-        textOutput(outputId = ns("total"))
+        div(
+          class = "ui grid",
+          div(
+            class = "two column row",
+            # texto à esquerda
+            div(
+              class = "left floated column",
+              textOutput(ns("titulo_cabecalho"), inline = TRUE)
+            ),
+            # texto à direita
+            div(
+              class = "right floated column",
+              style = "text-align: right",
+              textOutput(outputId = ns("total"))
+            )
+          )
+        )
       )
     ),
 
@@ -38,13 +54,17 @@ mod_accordion_title_content_server <- function(id, category, period){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    output$total <- renderText({
-      glue::glue(
-        "Total {category}: {CalcularTotais(categoria = category, period = period)}"
-      )
+    # gera o título do cabeçalho
+    output$titulo_cabecalho <- renderText({
+      glue::glue("Total {category}: ")
     })
 
+    # gera o valor total com o sufixo correto
+    output$total <- renderText({
+        CalcularTotais(categoria = category, period = period)
+    })
 
+    # gera o subtotal com o sufixo correto
     output$subtotal <- renderTable({
       CalcularSubTotais(categoria = category, periodo = period)
     })
