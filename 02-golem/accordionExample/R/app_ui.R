@@ -32,22 +32,34 @@ app_ui <- function(request) {
         class = "ui stackable grid",
 
         div(
-          class = "three wide column",
-          style = "min-width: 350px;",
-          # mod_accordion_ui("accordion_1", period = input$period)
-          mod_accordion_ui("accordion_1", period = "year")
-
+          class = "four wide computer eight wide tablet sixteen wide mobile column",
+          # style = "min-width: 350px;",
+          mod_accordion_ui("accordion_year", period = "year")
         ),
 
         div(
-          class = "four wide column",
-          h3("Total por categoria"),
+          class = "four wide computer eight wide tablet sixteen wide mobile column",
+          mod_accordion_ui("accordion_month", period = "month")
+        ),
+
+        div(
+          class = "four wide computer eight wide tablet sixteen wide mobile column",
+          mod_accordion_ui("accordion_week", period = "week")
+        ),
+
+        div(
+          class = "two column row",
           div(
-            class = "ui raised segment",
-            style = "min-width: 550px;",
-            tableOutput(outputId = "test_table")
+            class = "four wide column",
+            h3("Total por categoria"),
+            div(
+              class = "ui raised segment",
+              style = "min-width: 550px;",
+              tableOutput(outputId = "test_table")
+            )
           )
         )
+
       )
     )
 
