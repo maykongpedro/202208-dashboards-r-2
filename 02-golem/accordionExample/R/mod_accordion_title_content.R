@@ -69,8 +69,14 @@ mod_accordion_title_content_server <- function(id, category, period){
     })
 
     # gera o subtotal com o sufixo correto
-    output$subtotal <- renderTable({
-      CalcularSubTotais(categoria = category, periodo = period)
+    output$subtotal <- renderTable(
+      # fazer a tabela usar 100% do espaço disponível
+      width = "100%",
+      # remover título das colunas
+      colnames = FALSE, {
+
+        # calcular sub total e gerar tabela
+        CalcularSubTotais(categoria = category, periodo = period)
     })
 
 
