@@ -68,8 +68,8 @@ mod_accordion_ui <- function(id, period){
         )
       ),
 
-
       # espaço em branco
+
       br(),
 
       # accordion
@@ -77,7 +77,10 @@ mod_accordion_ui <- function(id, period){
         class = "ui accordion",
 
         mod_accordion_title_content_ui(ns("accordion_title_content_viagem"), active_ind = TRUE),
-        mod_accordion_title_content_ui(ns("accordion_title_content_hospedagem"), active_ind = FALSE)
+        mod_accordion_title_content_ui(ns("accordion_title_content_hospedagem"), active_ind = FALSE),
+        mod_accordion_title_content_ui(ns("accordion_title_content_comida"), active_ind = FALSE),
+        mod_accordion_title_content_ui(ns("accordion_title_content_bens"), active_ind = FALSE),
+        mod_accordion_title_content_ui(ns("accordion_title_content_servicos"), active_ind = FALSE)
 
       )
     )
@@ -104,15 +107,44 @@ mod_accordion_server <- function(id, period){
         paste0()
     })
 
+
+  # Add categoria 'Viagens' -------------------------------------------------
     mod_accordion_title_content_server(
       id = "accordion_title_content_viagem",
       category = "Travel",
       period = period
     )
 
+
+    # Add categoria 'Hospedagem' ----------------------------------------------
     mod_accordion_title_content_server(
       id = "accordion_title_content_hospedagem",
       category = "Housing",
+      period = period
+    )
+
+
+    # Add categoria 'Comida' --------------------------------------------------
+    mod_accordion_title_content_server(
+      id = "accordion_title_content_comida",
+      category = "Food",
+      period = period
+    )
+
+
+    # Add categoria 'Bens' ----------------------------------------------------
+    mod_accordion_title_content_server(
+      id = "accordion_title_content_bens",
+      category = "Goods",
+      period = period
+    )
+
+
+
+    # Add categoria 'Serviços' ------------------------------------------------
+    mod_accordion_title_content_server(
+      id = "accordion_title_content_servicos",
+      category = "Services",
       period = period
     )
 
