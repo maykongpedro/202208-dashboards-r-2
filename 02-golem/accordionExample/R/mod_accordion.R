@@ -23,6 +23,8 @@ mod_accordion_ui <- function(id, period){
     div(
       # escolha dessa classe por conta da borda fina que ela forma nos objetos
       class = "ui segment",
+      # definir um estilo para padronizar o tamanho mín e máx do accordion
+      style = "min-width: 250px; max-width: 275px",
       # título 3
       h3(
         paste0(
