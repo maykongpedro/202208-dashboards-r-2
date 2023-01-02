@@ -40,8 +40,12 @@ mod_accordion_title_content_ui <- function(id, active_ind = FALSE){
     # 1.2 conteúdo
     div(
       class = ifelse(active_ind == TRUE, "content active", "content"),
-      # p("Conteúdo Placeholder") # foi substituído pela tabela
-      tableOutput(outputId = ns("subtotal"))
+      div(
+        # adicionar cor
+        class = "ui teal inverted segment",
+        # adicionar a tabela com o subtotal por categoria
+        tableOutput(outputId = ns("subtotal"))
+      )
     ),
 
   )
